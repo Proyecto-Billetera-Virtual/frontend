@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Register from "./pages/Register";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<h1>Billetera Virtual</h1>} />
-        {/* Acá van a ir /login, /register, /dashboard, etc */}
+        <Route path="/register" element={<Register />} />
       </Routes>
     </BrowserRouter>
   );
