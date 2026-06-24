@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Transferir from "./pages/Transferir";
+import CargarDinero from "./pages/CargarDinero";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/transferir" element={<Transferir />} />
+        <Route path="/cargar-dinero" element={<CargarDinero />} />
       </Routes>
     </BrowserRouter>
   );
