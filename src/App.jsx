@@ -7,19 +7,60 @@ import ResetPassword from "./pages/ResetPassword";
 import Transferir from "./pages/Transferir";
 import CargarDinero from "./pages/CargarDinero";
 import PagarServicios from "./pages/PagarServicios";
+import CambiarMoneda from "./pages/CambiarMoneda";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Rutas públicas */}
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/transferir" element={<Transferir />} />
-        <Route path="/cargar-dinero" element={<CargarDinero />} />
-        <Route path="/pagar-servicios" element={<PagarServicios />} />
+
+        {/* Rutas protegidas (requieren estar logueado) */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/transferir"
+          element={
+            <ProtectedRoute>
+              <Transferir />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cargar-dinero"
+          element={
+            <ProtectedRoute>
+              <CargarDinero />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pagar-servicios"
+          element={
+            <ProtectedRoute>
+              <PagarServicios />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cambiar-moneda"
+          element={
+            <ProtectedRoute>
+              <CambiarMoneda />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
