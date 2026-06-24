@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import Transferir from "./pages/Transferir";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/transferir" element={<Transferir />} />
       </Routes>
     </BrowserRouter>
   );
