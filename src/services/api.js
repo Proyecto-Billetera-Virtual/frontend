@@ -14,13 +14,6 @@ export async function apiRequest(endpoint, options = {}) {
     headers,
   });
 
-  // Si el token es inválido o expiró, lo limpiamos y mandamos al login
-  if (response.status === 401) {
-    localStorage.removeItem("token");
-    window.location.href = "/";
-    return;
-  }
-
   const data = await response.json().catch(() => null);
 
   if (!response.ok) {
