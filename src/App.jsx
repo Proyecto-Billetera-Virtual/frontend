@@ -7,6 +7,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Transferir from "./pages/Transferir";
 import CargarDinero from "./pages/CargarDinero";
 import PagarServicios from "./pages/PagarServicios";
+import CambiarMoneda from "./pages/CambiarMoneda";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/transferir" element={<Transferir />} />
         <Route path="/cargar-dinero" element={<CargarDinero />} />
         <Route path="/pagar-servicios" element={<PagarServicios />} />
+        <Route path="/cambiar-moneda" element={<CambiarMoneda />} />
       </Routes>
     </BrowserRouter>
   );
