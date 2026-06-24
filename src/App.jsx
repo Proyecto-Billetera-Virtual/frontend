@@ -6,6 +6,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Transferir from "./pages/Transferir";
 import CargarDinero from "./pages/CargarDinero";
+import PagarServicios from "./pages/PagarServicios";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/transferir" element={<Transferir />} />
         <Route path="/cargar-dinero" element={<CargarDinero />} />
+        <Route path="/pagar-servicios" element={<PagarServicios />} />
       </Routes>
     </BrowserRouter>
   );
