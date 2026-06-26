@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { apiRequest } from "../services/api";
+import Spinner from "../components/Spinner";
+import Alert from "../components/Alert";
 
 function CambiarMoneda() {
   const navigate = useNavigate();
@@ -132,7 +134,7 @@ function CambiarMoneda() {
           </p>
         )}
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        <Alert type="error">{error}</Alert>
 
         <button type="submit" disabled={loading || loadingCotizacion}>
           {loading ? "Procesando..." : "Confirmar operación"}

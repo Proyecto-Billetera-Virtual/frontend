@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { apiRequest } from "../services/api";
+import Spinner from "../components/Spinner";
+import Alert from "../components/Alert";
 
 function CargarDinero() {
   const navigate = useNavigate();
@@ -76,10 +78,11 @@ function CargarDinero() {
           onChange={handleChange}
         />
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        <Alert type="error">{error}</Alert>
 
         <button type="submit" disabled={loading}>
-          {loading ? "Procesando..." : "Cargar saldo"}
+          {loading && <Spinner />}
+          {loading ? "Cargando..." : "Continuar"}
         </button>
       </form>
 

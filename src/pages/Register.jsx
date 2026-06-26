@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { apiRequest } from "../services/api";
+import Spinner from "../components/Spinner";
+import Alert from "../components/Alert";
 
 function Register() {
   const [form, setForm] = useState({
@@ -102,10 +104,11 @@ function Register() {
           onChange={handleChange}
         />
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        <Alert type="error">{error}</Alert>
 
         <button type="submit" disabled={loading}>
-          {loading ? "Cargando..." : "Crear Cuenta"}
+          {loading && <Spinner />}
+          {loading ? "Cargando..." : "Continuar"}
         </button>
       </form>
     </div>
