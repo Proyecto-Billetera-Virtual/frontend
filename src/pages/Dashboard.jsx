@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { apiRequest } from "../services/api";
+import Spinner from "../components/Spinner";
+import Alert from "../components/Alert";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -41,7 +43,7 @@ function Dashboard() {
         <button onClick={handleLogout}>Cerrar sesión</button>
       </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <Alert type="error">{error}</Alert>
 
       {saldo && (
         <>
