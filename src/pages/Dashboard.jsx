@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { apiRequest } from "../services/api";
-import Spinner from "../components/Spinner";
 import Alert from "../components/Alert";
 
 function Dashboard() {
@@ -47,18 +46,14 @@ function Dashboard() {
 
       {saldo && (
         <>
-          <p>
-            CVU: {saldo.cvu} — Alias: {saldo.alias}
-          </p>
-
           <div style={{ display: "flex", gap: "16px" }}>
             <div style={{ border: "1px solid #ccc", padding: "16px" }}>
               <h3>Saldo ARS</h3>
-              <p>${saldo.saldoArs}</p>
+              <p>${saldo.ars}</p>
             </div>
             <div style={{ border: "1px solid #ccc", padding: "16px" }}>
               <h3>Saldo USD</h3>
-              <p>US${saldo.saldoUsd}</p>
+              <p>US${saldo.usd}</p>
             </div>
           </div>
         </>

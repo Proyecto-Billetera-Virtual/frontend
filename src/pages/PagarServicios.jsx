@@ -7,8 +7,7 @@ import Alert from "../components/Alert";
 function PagarServicios() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    servicio: "Luz",
-    codigoFactura: "",
+    servicio: "Edesur",
     monto: "",
   });
   const [loading, setLoading] = useState(false);
@@ -20,8 +19,8 @@ function PagarServicios() {
   }
 
   function validate() {
-    if (!form.codigoFactura || !form.monto) {
-      return "Todos los campos son obligatorios";
+    if (!form.monto) {
+      return "El monto es obligatorio";
     }
     if (Number(form.monto) <= 0) {
       return "El monto debe ser mayor a 0";
@@ -45,7 +44,6 @@ function PagarServicios() {
         method: "POST",
         body: JSON.stringify({
           servicio: form.servicio,
-          codigoFactura: form.codigoFactura,
           monto: Number(form.monto),
         }),
       });
@@ -62,9 +60,8 @@ function PagarServicios() {
       <div>
         <h2>Comprobante de pago</h2>
         <p>Servicio: {form.servicio}</p>
-        <p>Código de factura: {form.codigoFactura}</p>
         <p>Monto pagado: ${form.monto}</p>
-        <p>N° de operación: {comprobante.numeroOperacion}</p>
+        <p>N° de comprobante: {comprobante.comprobante}</p>
         <Link to="/dashboard">Volver al Dashboard</Link>
       </div>
     );
@@ -75,16 +72,10 @@ function PagarServicios() {
       <h2>Pagar servicios</h2>
       <form onSubmit={handleSubmit}>
         <select name="servicio" value={form.servicio} onChange={handleChange}>
-          <option value="Luz">Luz</option>
+          <option value="Edesur">Edesur</option>
           <option value="Gas">Gas</option>
           <option value="Internet">Internet</option>
         </select>
-        <input
-          name="codigoFactura"
-          placeholder="Código de factura"
-          value={form.codigoFactura}
-          onChange={handleChange}
-        />
         <input
           name="monto"
           type="number"
@@ -97,7 +88,7 @@ function PagarServicios() {
 
         <button type="submit" disabled={loading}>
           {loading && <Spinner />}
-          {loading ? "Cargando..." : "Continuar"}
+          {loading ? "Procesando..." : "Pagar"}
         </button>
       </form>
 

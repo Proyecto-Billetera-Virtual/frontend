@@ -9,8 +9,8 @@ function CambiarMoneda() {
   const [cotizacion, setCotizacion] = useState(null);
   const [loadingCotizacion, setLoadingCotizacion] = useState(true);
 
-  const [tipoOperacion, setTipoOperacion] = useState("compra"); // compra = ARS -> USD, venta = USD -> ARS
-  const [montoUsd, setMontoUsd] = useState("");
+  const [tipo, setTipo] = useState("COMPRA");
+  const [monto_usd, setMontoUsd] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -33,16 +33,15 @@ function CambiarMoneda() {
     fetchCotizacion();
   }, []);
 
-  // Calculamos cuántos ARS se necesitan o se reciben según el tipo de operación
   function calcularArs() {
-    if (!cotizacion || !montoUsd) return 0;
-    const precio = tipoOperacion === "compra" ? cotizacion.venta : cotizacion.compra;
-    return (Number(montoUsd) * precio).toFixed(2);
+    if (!cotizacion || !monto_usd) return 0;
+    const precio = tipo === "COMPRA" ? cotizacion.venta : cotizacion.compra;
+    return (Number(monto_usd) * precio).toFixed(2);
   }
 
   function validate() {
-    if (!montoUsd) return "Ingresá un monto en USD";
-    if (Number(montoUsd) <= 0) return "El monto debe ser mayor a 0";
+    if (!monto_usd) return "Ingresá un monto en USD";
+    if (Number(monto_usd) <= 0) return "El monto debe ser mayor a 0";
     return "";
   }
 
@@ -58,11 +57,11 @@ function CambiarMoneda() {
 
     setLoading(true);
     try {
-      await apiRequest("/api/operaciones/cambio-moneda", {
+      await apiRequest("/api/operaciones/cambio", {
         method: "POST",
         body: JSON.stringify({
-          tipoOperacion,
-          montoUsd: Number(montoUsd),
+          tipo,
+          monto_usd: Number(monto_usd),
         }),
       });
       setSuccess(true);
@@ -90,9 +89,7 @@ function CambiarMoneda() {
       {loadingCotizacion && <p>Cargando cotización...</p>}
 
       {cotizacion && (
-        <p>
-          Compra: ${cotizacion.compra} — Venta: ${cotizacion.venta}
-        </p>
+        <p>Compra: ${cotizacion.compra} — Venta: ${cotizacion.venta}</p>
       )}
 
       <form onSubmit={handleSubmit}>
@@ -100,20 +97,20 @@ function CambiarMoneda() {
           <label>
             <input
               type="radio"
-              name="tipoOperacion"
-              value="compra"
-              checked={tipoOperacion === "compra"}
-              onChange={(e) => setTipoOperacion(e.target.value)}
+              name="tipo"
+              value="COMPRA"
+              checked={tipo === "COMPRA"}
+              onChange={(e) => setTipo(e.target.value)}
             />
             Comprar dólares
           </label>
           <label>
             <input
               type="radio"
-              name="tipoOperacion"
-              value="venta"
-              checked={tipoOperacion === "venta"}
-              onChange={(e) => setTipoOperacion(e.target.value)}
+              name="tipo"
+              value="VENTA"
+              checked={tipo === "VENTA"}
+              onChange={(e) => setTipo(e.target.value)}
             />
             Vender dólares
           </label>
@@ -122,13 +119,13 @@ function CambiarMoneda() {
         <input
           type="number"
           placeholder="Monto en USD"
-          value={montoUsd}
+          value={monto_usd}
           onChange={(e) => setMontoUsd(e.target.value)}
         />
 
-        {cotizacion && montoUsd && (
+        {cotizacion && monto_usd && (
           <p>
-            {tipoOperacion === "compra"
+            {tipo === "COMPRA"
               ? `Vas a necesitar $${calcularArs()} ARS`
               : `Vas a recibir $${calcularArs()} ARS`}
           </p>
@@ -137,6 +134,7 @@ function CambiarMoneda() {
         <Alert type="error">{error}</Alert>
 
         <button type="submit" disabled={loading || loadingCotizacion}>
+          {loading && <Spinner />}
           {loading ? "Procesando..." : "Confirmar operación"}
         </button>
       </form>

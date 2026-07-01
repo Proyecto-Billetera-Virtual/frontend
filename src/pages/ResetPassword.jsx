@@ -7,8 +7,8 @@ import Alert from "../components/Alert";
 function ResetPassword() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    codigo: "",
-    newPassword: "",
+    token_correo: "",
+    nueva_password: "",
     confirmPassword: "",
   });
   const [loading, setLoading] = useState(false);
@@ -20,13 +20,13 @@ function ResetPassword() {
   }
 
   function validate() {
-    if (!form.codigo || !form.newPassword || !form.confirmPassword) {
+    if (!form.token_correo || !form.nueva_password || !form.confirmPassword) {
       return "Todos los campos son obligatorios";
     }
-    if (form.newPassword !== form.confirmPassword) {
+    if (form.nueva_password !== form.confirmPassword) {
       return "Las contraseñas no coinciden";
     }
-    if (form.newPassword.length < 6) {
+    if (form.nueva_password.length < 6) {
       return "La contraseña debe tener al menos 6 caracteres";
     }
     return "";
@@ -44,11 +44,11 @@ function ResetPassword() {
 
     setLoading(true);
     try {
-      await apiRequest("/api/auth/reset-password", {
+      await apiRequest("/api/auth/resetear", {
         method: "POST",
         body: JSON.stringify({
-          codigo: form.codigo,
-          newPassword: form.newPassword,
+          token_correo: form.token_correo,
+          nueva_password: form.nueva_password,
         }),
       });
       setSuccess(true);
@@ -74,16 +74,16 @@ function ResetPassword() {
       <h2>Restablecer contraseña</h2>
       <form onSubmit={handleSubmit}>
         <input
-          name="codigo"
+          name="token_correo"
           placeholder="Código recibido por correo"
-          value={form.codigo}
+          value={form.token_correo}
           onChange={handleChange}
         />
         <input
-          name="newPassword"
+          name="nueva_password"
           type="password"
           placeholder="Nueva contraseña"
-          value={form.newPassword}
+          value={form.nueva_password}
           onChange={handleChange}
         />
         <input
@@ -98,7 +98,7 @@ function ResetPassword() {
 
         <button type="submit" disabled={loading}>
           {loading && <Spinner />}
-          {loading ? "Cargando..." : "Continuar"}
+          {loading ? "Cargando..." : "Cambiar contraseña"}
         </button>
       </form>
 
