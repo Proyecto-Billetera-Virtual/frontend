@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { apiRequest } from "../services/api";
 import Spinner from "../components/Spinner";
 import Alert from "../components/Alert";
@@ -68,6 +69,7 @@ function Register() {
       <div>
         <h2>¡Registro exitoso!</h2>
         <p>Te enviamos un correo de validación. Por favor, confirma tu cuenta para poder ingresar.</p>
+        <Link to="/">Ir al login</Link>
       </div>
     );
   }

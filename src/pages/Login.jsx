@@ -41,8 +41,12 @@ function Login() {
         }),
       });
 
-      // Guardamos el token de sesión (custom, no JWT)
       localStorage.setItem("token", data.token);
+      if (data.usuario?.id) {
+        localStorage.setItem("usuario_id", data.usuario.id.toString());
+      } else if (data.usuario_id) {
+        localStorage.setItem("usuario_id", data.usuario_id.toString());
+      }
 
       navigate("/dashboard");
     } catch (err) {

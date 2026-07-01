@@ -45,7 +45,7 @@ function Transferir() {
 
     setLoading(true);
     try {
-      await apiRequest("/api/operaciones/transferir", {
+      await apiRequest("/pasarela/operaciones/transferir", {
         method: "POST",
         body: JSON.stringify({
           destino_cvu: form.destino_cvu,
@@ -72,7 +72,7 @@ function Transferir() {
 
     setLoading(true);
     try {
-      await apiRequest("/api/operaciones/confirmar", {
+      await apiRequest("/pasarela/operaciones/confirmar", {
         method: "POST",
         body: JSON.stringify({ codigo_correo }),
       });

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { apiRequest } from "../services/api";
 import Spinner from "../components/Spinner";
@@ -6,6 +6,14 @@ import Alert from "../components/Alert";
 
 function CambiarMoneda() {
   const navigate = useNavigate();
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
   const [cotizacion, setCotizacion] = useState(null);
   const [loadingCotizacion, setLoadingCotizacion] = useState(true);
 
@@ -19,7 +27,7 @@ function CambiarMoneda() {
   useEffect(() => {
     async function fetchCotizacion() {
       try {
-        const data = await apiRequest("/api/cuenta/cotizacion", {
+        const data = await apiRequest("/pasarela/operaciones/cotizacion", {
           method: "GET",
         });
         setCotizacion(data);
@@ -57,7 +65,7 @@ function CambiarMoneda() {
 
     setLoading(true);
     try {
-      await apiRequest("/api/operaciones/cambio", {
+      await apiRequest("/pasarela/operaciones/cambio", {
         method: "POST",
         body: JSON.stringify({
           tipo,
@@ -65,7 +73,7 @@ function CambiarMoneda() {
         }),
       });
       setSuccess(true);
-      setTimeout(() => navigate("/dashboard"), 1500);
+      timerRef.current = setTimeout(() => navigate("/dashboard"), 1500);
     } catch (err) {
       setError(err.message);
     } finally {

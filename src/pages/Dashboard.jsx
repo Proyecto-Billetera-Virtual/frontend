@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { apiRequest } from "../services/api";
 import Alert from "../components/Alert";
+import Spinner from "../components/Spinner";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -10,20 +11,32 @@ function Dashboard() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    const controller = new AbortController();
+
     async function fetchSaldo() {
       try {
+        setError("");
         const data = await apiRequest("/api/cuenta/saldo", {
           method: "GET",
+          signal: controller.signal,
         });
-        setSaldo(data);
+        if (!controller.signal.aborted) {
+          setSaldo(data);
+        }
       } catch (err) {
-        setError(err.message);
+        if (err.name !== "AbortError") {
+          setError(err.message);
+        }
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     }
 
     fetchSaldo();
+
+    return () => controller.abort();
   }, []);
 
   function handleLogout() {
@@ -32,7 +45,7 @@ function Dashboard() {
   }
 
   if (loading) {
-    return <p>Cargando...</p>;
+    return <Spinner />;
   }
 
   return (

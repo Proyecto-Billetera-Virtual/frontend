@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { apiRequest } from "../services/api";
 import Spinner from "../components/Spinner";
@@ -6,6 +6,14 @@ import Alert from "../components/Alert";
 
 function ResetPassword() {
   const navigate = useNavigate();
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
   const [form, setForm] = useState({
     token_correo: "",
     nueva_password: "",
@@ -52,7 +60,7 @@ function ResetPassword() {
         }),
       });
       setSuccess(true);
-      setTimeout(() => navigate("/"), 2000);
+      timerRef.current = setTimeout(() => navigate("/"), 2000);
     } catch (err) {
       setError(err.message);
     } finally {

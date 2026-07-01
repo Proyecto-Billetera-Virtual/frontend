@@ -40,7 +40,7 @@ function PagarServicios() {
 
     setLoading(true);
     try {
-      const data = await apiRequest("/api/operaciones/pagar", {
+      const data = await apiRequest("/pasarela/operaciones/pagar", {
         method: "POST",
         body: JSON.stringify({
           servicio: form.servicio,
