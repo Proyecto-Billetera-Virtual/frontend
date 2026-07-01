@@ -1,7 +1,12 @@
 const PROXY_URL = import.meta.env.VITE_API_PROXY_URL;
 
+export function getUsuarioId() {
+  return localStorage.getItem("usuario_id");
+}
+
 export async function apiRequest(endpoint, options = {}) {
   const token = localStorage.getItem("token");
+  const usuario_id = getUsuarioId();
 
   const headers = {
     "Content-Type": "application/json",
@@ -9,14 +14,17 @@ export async function apiRequest(endpoint, options = {}) {
     ...options.headers,
   };
 
+  const body = options.body || (options.method !== "GET" ? null : null);
+
   const response = await fetch(`${PROXY_URL}${endpoint}`, {
     ...options,
     headers,
+    ...(body && { body }),
   });
 
-  // Si el token es inválido o expiró, lo limpiamos y mandamos al login
   if (response.status === 401) {
     localStorage.removeItem("token");
+    localStorage.removeItem("usuario_id");
     window.location.href = "/";
     return;
   }

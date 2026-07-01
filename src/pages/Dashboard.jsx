@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { apiRequest } from "../services/api";
-import Spinner from "../components/Spinner";
 import Alert from "../components/Alert";
+import Spinner from "../components/Spinner";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -11,20 +11,32 @@ function Dashboard() {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    const controller = new AbortController();
+
     async function fetchSaldo() {
       try {
+        setError("");
         const data = await apiRequest("/api/cuenta/saldo", {
           method: "GET",
+          signal: controller.signal,
         });
-        setSaldo(data);
+        if (!controller.signal.aborted) {
+          setSaldo(data);
+        }
       } catch (err) {
-        setError(err.message);
+        if (err.name !== "AbortError") {
+          setError(err.message);
+        }
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     }
 
     fetchSaldo();
+
+    return () => controller.abort();
   }, []);
 
   function handleLogout() {
@@ -33,7 +45,7 @@ function Dashboard() {
   }
 
   if (loading) {
-    return <p>Cargando...</p>;
+    return <Spinner />;
   }
 
   return (
@@ -47,18 +59,14 @@ function Dashboard() {
 
       {saldo && (
         <>
-          <p>
-            CVU: {saldo.cvu} — Alias: {saldo.alias}
-          </p>
-
           <div style={{ display: "flex", gap: "16px" }}>
             <div style={{ border: "1px solid #ccc", padding: "16px" }}>
               <h3>Saldo ARS</h3>
-              <p>${saldo.saldoArs}</p>
+              <p>${saldo.ars}</p>
             </div>
             <div style={{ border: "1px solid #ccc", padding: "16px" }}>
               <h3>Saldo USD</h3>
-              <p>US${saldo.saldoUsd}</p>
+              <p>US${saldo.usd}</p>
             </div>
           </div>
         </>

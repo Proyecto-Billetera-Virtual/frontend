@@ -21,7 +21,7 @@ function ForgotPassword() {
 
     setLoading(true);
     try {
-      await apiRequest("/api/auth/forgot-password", {
+      await apiRequest("/api/auth/recuperar", {
         method: "POST",
         body: JSON.stringify({ email }),
       });
@@ -58,7 +58,7 @@ function ForgotPassword() {
 
         <button type="submit" disabled={loading}>
           {loading && <Spinner />}
-          {loading ? "Cargando..." : "Continuar"}
+          {loading ? "Cargando..." : "Enviar código"}
         </button>
       </form>
 

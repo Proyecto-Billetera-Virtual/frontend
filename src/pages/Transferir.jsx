@@ -6,14 +6,14 @@ import Alert from "../components/Alert";
 
 function Transferir() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(1); // 1 = datos, 2 = código de confirmación
+  const [step, setStep] = useState(1);
 
   const [form, setForm] = useState({
-    destino: "",
+    destino_cvu: "",
     monto: "",
     moneda: "ARS",
   });
-  const [codigo, setCodigo] = useState("");
+  const [codigo_correo, setCodigoCorreo] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -24,7 +24,7 @@ function Transferir() {
   }
 
   function validateStep1() {
-    if (!form.destino || !form.monto) {
+    if (!form.destino_cvu || !form.monto) {
       return "Todos los campos son obligatorios";
     }
     if (Number(form.monto) <= 0) {
@@ -45,15 +45,14 @@ function Transferir() {
 
     setLoading(true);
     try {
-      await apiRequest("/api/operaciones/transferir", {
+      await apiRequest("/pasarela/operaciones/transferir", {
         method: "POST",
         body: JSON.stringify({
-          destino: form.destino,
+          destino_cvu: form.destino_cvu,
           monto: Number(form.monto),
           moneda: form.moneda,
         }),
       });
-      // Pasamos al paso 2: pedir código de confirmación
       setStep(2);
     } catch (err) {
       setError(err.message);
@@ -66,16 +65,16 @@ function Transferir() {
     e.preventDefault();
     setError("");
 
-    if (!codigo) {
+    if (!codigo_correo) {
       setError("Ingresá el código de confirmación");
       return;
     }
 
     setLoading(true);
     try {
-      await apiRequest("/api/operaciones/confirmar-transferencia", {
+      await apiRequest("/pasarela/operaciones/confirmar", {
         method: "POST",
-        body: JSON.stringify({ codigo }),
+        body: JSON.stringify({ codigo_correo }),
       });
       setSuccess(true);
       setTimeout(() => navigate("/dashboard"), 2000);
@@ -102,9 +101,9 @@ function Transferir() {
       {step === 1 && (
         <form onSubmit={handleSubmitStep1}>
           <input
-            name="destino"
-            placeholder="CVU o Alias destino"
-            value={form.destino}
+            name="destino_cvu"
+            placeholder="CVU destino"
+            value={form.destino_cvu}
             onChange={handleChange}
           />
           <input
@@ -120,10 +119,10 @@ function Transferir() {
           </select>
 
           <Alert type="error">{error}</Alert>
-          
+
           <button type="submit" disabled={loading}>
             {loading && <Spinner />}
-            {loading ? "Cargando..." : "Continuar"}
+            {loading ? "Procesando..." : "Continuar"}
           </button>
         </form>
       )}
@@ -133,13 +132,14 @@ function Transferir() {
           <p>Te enviamos un código de confirmación a tu correo.</p>
           <input
             placeholder="Código de confirmación"
-            value={codigo}
-            onChange={(e) => setCodigo(e.target.value)}
+            value={codigo_correo}
+            onChange={(e) => setCodigoCorreo(e.target.value)}
           />
 
-          {error && <p style={{ color: "red" }}>{error}</p>}
+          <Alert type="error">{error}</Alert>
 
           <button type="submit" disabled={loading}>
+            {loading && <Spinner />}
             {loading ? "Confirmando..." : "Confirmar transferencia"}
           </button>
         </form>
